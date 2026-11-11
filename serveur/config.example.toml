@@ -1,0 +1,111 @@
+# Configuration du serveur LUMEN
+# Fichier à placer dans /etc/lumen/config.toml (l'installation le fait pour vous)
+
+[xtream]
+# Adresse du serveur de votre abonnement, avec le port s'il y en a un (sans / à la fin)
+server = "http://adresse-du-fournisseur:8080"
+username = "votre_identifiant"
+password = "votre_mot_de_passe"
+
+# Format du direct : "ts" (le plus courant) ou "m3u8" (à essayer si certaines chaînes coupent)
+live_format = "ts"
+
+# Guide des programmes : laissez vide pour utiliser celui du fournisseur
+epg_url = ""
+
+# Replay : forme de l'adresse demandée au fournisseur.
+# "path" (le plus courant) : /timeshift/... ; "php" : /streaming/timeshift.php?...
+# Si le replay ne démarre jamais alors que la chaîne en a un, essayez "php".
+replay_format = "path"
+# Fuseau horaire du fournisseur pour le replay. Vide = celui annoncé par le fournisseur.
+# Si les replays démarrent avec une heure de décalage, mettez par exemple "Europe/Paris" ou "UTC".
+replay_timezone = ""
+
+# Le guide externe (sources XMLTV avec vignettes) se règle depuis la page
+# http://ADRESSE:8765/reglages, onglet Guide.
+
+[server]
+listen = "0.0.0.0"
+port = 8765
+# Mot de passe optionnel entre la TV et ce serveur (vide = aucun, suffisant sur le réseau de la maison)
+token = ""
+data_dir = "/var/lib/lumen"
+
+[sync]
+# Nombre d'heures de guide à garder
+epg_hours = 36
+# Délai d'attente maximum pour le fournisseur, en secondes
+timeout = 60
+
+[medias]
+# Médiathèque personnelle : vos films et séries posés sur un NAS ou un disque,
+# montés quelque part sur CE serveur (voir LISEZMOI.md). Les dossiers eux-mêmes
+# s'ajoutent depuis la page http://ADRESSE:8765/reglages, onglet Médiathèque.
+#
+# Clé TMDB (gratuite, à créer sur themoviedb.org : Paramètres > API > clé v3).
+# Elle n'est PAS nécessaire si vos dossiers sont déjà rangés par tinyMediaManager,
+# Jellyfin ou Kodi : LUMEN lit alors les .nfo, les affiches déjà présentes et
+# l'identifiant {tmdb-123} inscrit dans le nom du dossier.
+# Elle sert aux fichiers non balisés, dont il faut chercher le titre.
+tmdb_key = ""
+# Langue des fiches
+langue = "fr-FR"
+# Délai d'attente pour TMDB, en secondes
+timeout = 20
+
+[tv]
+# Démarrage automatique : quand le téléviseur s'allume, LUMEN s'ouvre tout seul.
+# Tizen ne permet pas à une application installée en mode développeur de se déclarer
+# application de démarrage ; le serveur le fait donc depuis l'extérieur.
+# Tout se règle depuis la page http://ADRESSE:8765/reglages, onglet Téléviseur.
+#
+# Adresse de votre téléviseur sur le réseau (idéalement fixée dans votre box)
+host = ""
+# Identifiant de l'application à ouvrir. Celui de LUMEN est LumenTVapp.Lumen ;
+# la page de réglages sait aussi lire la liste des applications du téléviseur.
+app = ""
+# Mettre à true pour activer la surveillance
+demarrage_auto = false
+# Secondes d'attente après l'allumage, le temps que le téléviseur finisse de démarrer
+delai = 6
+
+[filtres]
+# Règles automatiques pour masquer des bouquets (catégories) du fournisseur.
+# Elles s'appliquent aussi aux bouquets que le fournisseur ajoutera plus tard.
+# * remplace n'importe quel texte. Majuscules et accents ne comptent pas.
+# Les choix faits à la main sur la page http://ADRESSE:8765/reglages passent avant ces règles.
+#
+# « garder » : si la liste n'est pas vide, SEULS les bouquets qui correspondent restent visibles.
+# « masquer » : les bouquets qui correspondent sont cachés.
+#
+# Exemples :
+#   direct_garder  = ["BE *", "FR *", "*belgique*", "*france*"]
+#   direct_masquer = ["*adult*", "*xxx*", "*24/7*"]
+#   films_masquer  = ["AR *", "TR *", "*bollywood*"]
+direct_garder = []
+direct_masquer = []
+films_garder = []
+films_masquer = []
+series_garder = []
+series_masquer = []
+
+[tv]
+# Démarrage automatique : quand le téléviseur s'allume, le serveur lui demande
+# d'ouvrir LUMEN à la place de Samsung TV Plus.
+#
+# Tout se règle plus simplement depuis http://ADRESSE:8765/reglages, onglet
+# Téléviseur : les valeurs choisies là-bas passent avant celles d'ici.
+#
+# host   : adresse du téléviseur sur le réseau (donnez-lui une adresse fixe
+#          dans votre box, sinon elle changera un jour et le réveil s'arrêtera)
+# app    : identifiant de l'application, visible dans la liste que le téléviseur
+#          renvoie après l'autorisation
+# delai  : secondes d'attente après l'allumage, le temps que le téléviseur
+#          finisse de démarrer
+# essais : nombre de demandes successives ; LUMEN est relancé tant qu'il n'est
+#          pas à l'écran, car TV Plus reprend parfois la main une seconde
+host = ""
+app = "LumenTVapp.Lumen"
+demarrage_auto = false
+delai = 6
+essais = 6

@@ -1,0 +1,33 @@
+# ⚠️ Ne jamais publier une configuration réelle : elle contient les identifiants
+# du fournisseur IPTV, la clé TMDB et le jeton du téléviseur.
+config.toml
+*.toml
+!config.example.toml
+.smb-nas
+*.credentials
+
+# Données du serveur
+lumen.db
+lumen.db-wal
+lumen.db-shm
+art/
+img/
+*.log
+
+# Paquets construits
+*.wgt
+*.tar.gz
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Éditeurs et systèmes
+.vscode/
+.idea/
+.DS_Store
+*~
+*.swp

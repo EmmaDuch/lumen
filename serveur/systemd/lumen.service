@@ -1,0 +1,20 @@
+[Unit]
+Description=LUMEN - serveur IPTV pour la TV
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=lumen
+Group=lumen
+WorkingDirectory=/opt/lumen
+ExecStart=/usr/bin/python3 -m lumen.server
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/lumen
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

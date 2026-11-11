@@ -1,0 +1,39 @@
+name: Signaler un problème / Report a problem
+description: Quelque chose ne marche pas / Something does not work
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **Avant de coller quoi que ce soit, relisez-le.** Les journaux et les captures
+        d'écran contiennent souvent l'adresse et le nom d'utilisateur de votre abonnement
+        IPTV. Remplacez-les par `xxx`. Ne joignez jamais votre `config.toml`.
+
+        ⚠️ **Read anything you paste before posting.** Logs and screenshots often carry your
+        IPTV subscription's address and username. Replace them with `xxx`. Never attach your
+        `config.toml`.
+  - type: input
+    id: modele
+    attributes:
+      label: Modèle du téléviseur / Television model
+      description: Menu → Assistance → À propos. Par exemple UE55M73HAUXXN.
+      placeholder: UE55...
+    validations: {required: true}
+  - type: input
+    id: version
+    attributes:
+      label: Version de LUMEN / LUMEN version
+      description: En bas de la page de réglages, et dans l'application.
+      placeholder: "serveur 2.6, appli 2.4"
+    validations: {required: true}
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Ce que vous faisiez, et ce qui s'est passé / What you did, and what happened
+    validations: {required: true}
+  - type: textarea
+    id: journaux
+    attributes:
+      label: Journaux / Logs
+      description: "`journalctl -u lumen -n 30 --no-pager` — relus avant de coller."
+      render: text

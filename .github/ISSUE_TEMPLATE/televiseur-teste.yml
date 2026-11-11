@@ -1,0 +1,37 @@
+name: Mon téléviseur fonctionne / My television works
+description: Ajouter un modèle à la liste des téléviseurs testés
+labels: [compatibilité]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci — c'est l'information qui manque le plus. LUMEN n'a été écrit que sur un seul
+        modèle ; chaque retour élargit la liste.
+
+        Thank you — this is the information most missing. LUMEN was written on a single model;
+        every report widens the list.
+  - type: input
+    id: modele
+    attributes:
+      label: Modèle exact / Exact model
+      placeholder: UE55M73HAUXXN
+    validations: {required: true}
+  - type: input
+    id: annee
+    attributes:
+      label: Année ou génération / Year or generation
+      placeholder: "2026"
+  - type: dropdown
+    id: etat
+    attributes:
+      label: Ça marche ? / Does it work?
+      options:
+        - Tout fonctionne / Everything works
+        - Ça marche, avec des réserves / Works, with caveats
+        - Ça ne marche pas / Does not work
+    validations: {required: true}
+  - type: textarea
+    id: remarques
+    attributes:
+      label: Remarques / Notes
+      description: Ce qui a demandé un réglage particulier, ce qui ne marche pas.

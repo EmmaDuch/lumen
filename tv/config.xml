@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets"
+        id="http://lumen.local/tv" version="2.4.0" viewmodes="maximized">
+    <tizen:application id="LumenTVapp.Lumen" package="LumenTVapp" required_version="5.0"/>
+    <content src="index.html"/>
+    <feature name="http://tizen.org/feature/screen.size.all"/>
+    <icon src="icon.png"/>
+    <name>LUMEN</name>
+    <description>IPTV : direct, films et séries</description>
+    <author>EmmaDuch</author>
+    <tizen:privilege name="http://tizen.org/privilege/internet"/>
+    <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
+    <tizen:privilege name="http://developer.samsung.com/privilege/avplay"/>
+    <access origin="*" subdomains="true"/>
+    <tizen:allow-navigation>*</tizen:allow-navigation>
+    <tizen:content-security-policy>default-src * 'self' data: blob: 'unsafe-inline' 'unsafe-eval'; img-src * data: blob:; media-src * blob:; connect-src *</tizen:content-security-policy>
+    <tizen:setting screen-orientation="landscape" context-menu="disable" background-support="disable"
+                   encryption="disable" install-location="auto" hwkey-event="enable"/>
+    <tizen:profile name="tv-samsung"/>
+</widget>

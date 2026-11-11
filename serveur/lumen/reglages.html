@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUMEN – Réglages</title>
+<style>
+  :root { --bg:#0B0D12; --card:#151922; --card2:#1B2130; --line:#262C38; --text:#F2F4F8; --muted:#9AA3B2;
+          --soft:#C4CAD4; --accent:#F5B544; --on-accent:#1A1204; --red:#E5575C; --green:#55C98B; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.45 system-ui, "Segoe UI", Inter, sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
+  header { display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+  .logo { width:34px; height:34px; border-radius:9px; background:var(--accent); display:grid; place-items:center; }
+  h1 { margin:0; font-size:26px; letter-spacing:.06em; }
+  h2 { font-size:19px; margin:0 0 12px; }
+  .sub { color:var(--muted); margin:0 0 22px; }
+  button, input, select, textarea { font:inherit; }
+  button { cursor:pointer; }
+  .tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  .tabs button { border:0; border-radius:999px; padding:10px 20px; background:rgba(255,255,255,.08); color:var(--soft); }
+  .tabs button[aria-selected="true"] { background:var(--text); color:var(--bg); font-weight:600; }
+  input[type=search], input[type=text], input[type=url], select, .edit { color:var(--text); background:var(--card);
+    border:1px solid var(--line); border-radius:10px; padding:9px 13px; }
+  input::placeholder { color:#6B7384; }
+  :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .tools { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+  .tools input[type=search] { flex:1 1 240px; }
+  .btn { border:0; border-radius:10px; padding:10px 18px; background:rgba(255,255,255,.1); color:var(--text); }
+  .btn.main { background:var(--accent); color:var(--on-accent); font-weight:600; }
+  .btn.danger { background:rgba(229,87,92,.16); color:#FF9DA1; }
+  .btn.wide { display:block; width:100%; text-align:left; margin-bottom:8px; }
+  .tag.danger { background:rgba(229,87,92,.18); color:#FF9DA1; border-color:rgba(229,87,92,.5); }
+  .link.danger { color:#FF9DA1; }
+  code { background:rgba(255,255,255,.07); padding:1px 6px; border-radius:5px; }
+  .btn.small { padding:6px 12px; font-size:14px; border-radius:8px; }
+  .link { border:0; background:none; color:var(--accent); padding:4px 6px; font-size:14px; }
+  .help { color:var(--muted); font-size:14px; margin:-4px 0 14px; }
+  .summary { color:var(--muted); margin:0 0 12px; min-height:22px; }
+  .msg { color:#FF9DA1; } .okmsg { color:var(--green); }
+  ul { list-style:none; margin:0; padding:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  li { display:flex; align-items:center; gap:12px; padding:9px 14px; border-top:1px solid var(--line);
+       background:var(--card); min-height:56px; }
+  li:first-child { border-top:0; }
+  li.off { background:transparent; } li.off .name { color:var(--muted); }
+  li.sel { background:var(--card2); box-shadow:inset 3px 0 0 var(--accent); }
+  li.drag { opacity:.4; } li.over { box-shadow:inset 0 3px 0 var(--accent); }
+  .name { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .name small, .orig { display:block; color:var(--muted); font-size:13px; }
+  .count { color:var(--muted); font-size:14px; flex-shrink:0; }
+  .tag { font-size:12px; padding:2px 8px; border-radius:6px; background:rgba(255,255,255,.08); color:var(--soft); flex-shrink:0; }
+  .tag.replay { background:rgba(245,181,68,.15); color:var(--accent); }
+  .tag.q { background:rgba(120,180,255,.15); color:#9CC5FF; }
+  .tag.epg { background:rgba(85,201,139,.14); color:var(--green); }
+  .chlogo { width:38px; height:38px; border-radius:8px; background:#262C38; flex-shrink:0; object-fit:contain; padding:3px; }
+  .poster-mini { width:32px; height:48px; border-radius:5px; background:#262C38; flex-shrink:0; object-fit:cover; }
+  .hidden { display:none !important; }
+  .edit.num { width:78px; text-align:right; } .edit.title { flex:1; min-width:0; }
+  .cols { display:grid; grid-template-columns: 360px 1fr; gap:22px; align-items:start; }
+  li.stack { flex-wrap:wrap; align-items:flex-start; padding:10px 14px; }
+  li.stack .top { display:flex; align-items:center; gap:10px; width:100%; }
+  li.stack .acts { display:flex; gap:2px; width:100%; margin-top:2px; padding-left:26px; }
+  li.stack .acts button { padding:2px 6px; font-size:13px; }
+  .panel { border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--card); }
+  .scroll { max-height:620px; overflow:auto; }
+  .row { display:flex; gap:8px; align-items:center; }
+  .grow { flex:1; }
+  .handle { cursor:grab; color:var(--muted); flex-shrink:0; user-select:none; font-size:18px; }
+  .empty { padding:26px 14px; color:var(--muted); text-align:center; }
+  .prev { display:grid; grid-template-columns: 1fr 24px 1fr; gap:6px 12px; font-size:14px; align-items:center; }
+  .prev .b { color:var(--muted); } .prev .a { color:var(--text); }
+  .ok { color:var(--green); font-size:13px; width:76px; flex-shrink:0; }
+  .foot { margin-top:26px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; color:var(--muted); }
+  dialog { background:var(--card); color:var(--text); border:1px solid var(--line); border-radius:16px;
+           padding:22px; max-width:760px; width:92%; max-height:88vh; overflow:auto; }
+  dialog::backdrop { background:rgba(0,0,0,.6); }
+  label.lbl, span.lbl { display:block; font-size:13px; color:var(--muted); margin:10px 0 4px; }
+  textarea.edit { resize:vertical; min-height:92px; font:inherit; line-height:1.45; padding:8px 10px; }
+  .arts { display:grid; grid-template-columns: 236px 1fr; gap:20px; margin-top:18px; align-items:start; }
+  .artslot .art { display:block; width:100%; max-width:220px; aspect-ratio:2/3; object-fit:cover;
+                  border-radius:10px; background:#262C38; margin-bottom:8px; }
+  .artslot .art.wide { max-width:100%; aspect-ratio:16/9; }
+  .artslot .tools { flex-wrap:wrap; gap:6px; }
+  .artslot .tools .btn { padding:4px 9px; font-size:13px; }
+  .artslot .tools .link { padding:4px 4px; font-size:13px; }
+  #dlg-body p.help, #dlg2-body p.help { margin:7px 0 0; }
+  .tmdb { display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-top:12px;
+          max-height:340px; overflow:auto; }
+  .tcard { display:flex; flex-direction:column; gap:6px; background:none; border:1px solid var(--line);
+           border-radius:10px; padding:6px; color:var(--text); font:inherit; font-size:12px; cursor:pointer;
+           text-align:left; }
+  .tcard:hover { border-color:var(--accent); }
+  .tcard img { width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:6px; background:#262C38; }
+  .tcard span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .w100 { width:100%; }
+  #t-tv .cols { grid-template-columns: 1fr 1fr; }
+  #t-tv .row { margin:10px 0; }
+  #t-tv .row > span { width:172px; flex-shrink:0; color:var(--muted); font-size:14px; }
+  #t-tv .row input[type=text] { flex:1; min-width:0; }
+  #t-tv .row input[type=number] { width:86px; text-align:right; }
+  #t-tv small { color:var(--muted); }
+  label.check { display:flex; gap:8px; align-items:center; margin:16px 0 0; font-size:15px; }
+  li.line { display:flex; gap:10px; align-items:center; padding:8px 14px; }
+  li.line .nm { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  li.line code { color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1A1204" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
+    <h1>LUMEN</h1>
+  </header>
+  <p class="sub">Organisez vos bouquets, vos chaînes et votre guide des programmes. Tout est enregistré tout de suite.</p>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="bq" aria-selected="true">Mes bouquets</button>
+    <button role="tab" data-tab="chans" aria-selected="false">Chaînes</button>
+    <button role="tab" data-tab="items" aria-selected="false">Films et séries</button>
+    <button role="tab" data-tab="medias" aria-selected="false">Médiathèque</button>
+    <button role="tab" data-tab="tv" aria-selected="false">Téléviseur</button>
+    <button role="tab" data-tab="names" aria-selected="false">Noms</button>
+    <button role="tab" data-tab="guide" aria-selected="false">Guide</button>
+    <button role="tab" data-tab="cats" aria-selected="false">Bouquets du fournisseur</button>
+  </div>
+
+  <!-- ================= MES BOUQUETS ================= -->
+  <section id="t-bq">
+    <div class="cols">
+      <div class="panel">
+        <h2>Mes bouquets</h2>
+        <div class="tabs" style="margin:10px 0 12px">
+          <button class="btn small" data-bqk="live" aria-selected="true">Direct</button>
+          <button class="btn small" data-bqk="vod" aria-selected="false">Films</button>
+          <button class="btn small" data-bqk="series" aria-selected="false">Séries</button>
+        </div>
+        <p class="help">Ils passent avant ceux du fournisseur sur la TV. Chaque sorte a ses propres bouquets.</p>
+        <ul id="bqlist"></ul>
+        <div class="row" style="margin-top:12px">
+          <button class="btn main grow" id="bq-new">Nouveau bouquet</button>
+          <button class="btn" id="bq-from-cat" title="Créer à partir d'un bouquet du fournisseur">Depuis une catégorie</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="row" style="margin-bottom:12px">
+          <h2 class="grow" id="bq-title" style="margin:0">Contenu</h2>
+          <button class="btn small" id="bq-renum">Renuméroter</button>
+          <button class="btn small" id="bq-add">Ajouter des chaînes</button>
+        </div>
+        <p class="help" id="bq-hint">Glissez les lignes pour changer l'ordre. Cet ordre sert aussi à la renumérotation.</p>
+        <p class="summary" id="bq-sum"></p>
+        <ul id="bqchans" class="scroll"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAÎNES ================= -->
+  <section id="t-chans" hidden>
+    <div class="tools">
+      <input id="cq" type="search" placeholder="Rechercher une chaîne" aria-label="Rechercher une chaîne">
+      <select id="ccat" aria-label="Bouquet"><option value="all">Tous les bouquets</option></select>
+      <button class="btn" id="num-reset">Numéros d'origine</button>
+    </div>
+    <p class="help">Modifiez le numéro ou le nom puis appuyez sur Entrée. Un champ vide revient à la valeur du fournisseur.</p>
+    <p class="summary" id="csummary"></p>
+    <ul id="clist"></ul>
+  </section>
+
+  <!-- ================= FILMS ET SÉRIES ================= -->
+  <section id="t-items" hidden>
+    <div class="tabs" style="margin-bottom:14px">
+      <button class="btn small" data-ikind="vod" aria-selected="true">Films</button>
+      <button class="btn small" data-ikind="series" aria-selected="false">Séries</button>
+    </div>
+    <div class="tools">
+      <input id="iq" type="search" placeholder="Rechercher un titre" aria-label="Rechercher un titre">
+      <select id="icat" aria-label="Bouquet"><option value="all">Tous les bouquets</option></select>
+    </div>
+    <p class="help">Les règles de nettoyage s'appliquent d'abord. Tapez un titre puis Entrée pour le fixer à la main ; un champ vide revient aux règles.</p>
+    <p class="summary" id="isummary"></p>
+    <ul id="ilist"></ul>
+  </section>
+
+  <!-- ================= MÉDIATHÈQUE ================= -->
+  <section id="t-medias" hidden>
+    <div class="cols">
+      <div class="panel">
+        <h2>Dossiers</h2>
+        <p class="help">Chemins tels que le serveur les voit, par exemple <code>/mnt/medias/Films</code>.</p>
+        <ul id="mroots"></ul>
+        <div class="tools" style="margin-top:14px">
+          <input id="mpath" type="text" placeholder="/mnt/medias/Films" aria-label="Chemin du dossier">
+          <select id="mkind" aria-label="Contenu">
+            <option value="auto">Détection automatique</option>
+            <option value="films">Films</option>
+            <option value="series">Séries</option>
+          </select>
+          <button class="btn" id="madd">Ajouter</button>
+        </div>
+        <p class="summary" id="msummary"></p>
+        <div class="tools" style="margin-top:14px">
+          <button class="btn primary" id="mscan">Analyser</button>
+          <button class="btn" id="mforce">Tout réanalyser</button>
+        </div>
+        <p class="help" id="mstate"></p>
+      </div>
+      <div class="panel">
+        <h2>Contenu</h2>
+        <div class="tabs" style="margin:0 0 12px">
+          <button class="btn small" data-mk="movie" aria-selected="true">Films</button>
+          <button class="btn small" data-mk="episode" aria-selected="false">Épisodes</button>
+          <button class="btn small" data-mk="probleme" aria-selected="false">À vérifier</button>
+        </div>
+        <div class="tools"><input id="mq" type="search" placeholder="Rechercher" aria-label="Rechercher un fichier"></div>
+        <p class="summary" id="mcount"></p>
+        <ul id="mlist"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TÉLÉVISEUR ================= -->
+  <section id="t-tv" hidden>
+    <div class="cols">
+      <div class="panel">
+        <h2>Démarrage automatique</h2>
+        <p class="help">Le serveur surveille le téléviseur et ouvre LUMEN dès qu'il s'allume,
+          à la place de Samsung TV Plus. Le téléviseur doit rester joignable sur le réseau.</p>
+        <label class="row"><span>Adresse du téléviseur</span>
+          <input id="tvhost" type="text" placeholder="192.168.1.30" aria-label="Adresse IP du téléviseur"></label>
+        <label class="row"><span>Application</span>
+          <input id="tvapp" type="text" placeholder="LumenTVapp.Lumen" aria-label="Identifiant de l'application"></label>
+        <label class="row"><span>Attente avant lancement</span>
+          <input id="tvdelai" type="number" min="0" max="60" step="1" aria-label="Secondes d'attente"> <small>secondes</small></label>
+        <label class="row"><span>Essais</span>
+          <input id="tvessais" type="number" min="1" max="20" step="1" aria-label="Nombre d'essais"></label>
+        <label class="check"><input id="tvauto" type="checkbox"> Ouvrir LUMEN quand le téléviseur s'allume</label>
+        <div class="tools" style="margin-top:14px">
+          <button class="btn primary" id="tvsave">Enregistrer</button>
+          <button class="btn" id="tvtest">Lancer maintenant</button>
+        </div>
+        <p class="help" id="tvstate"></p>
+      </div>
+      <div class="panel">
+        <h2>Autorisation</h2>
+        <p class="help">La première fois, le téléviseur demande s'il accepte le serveur.
+          Allumez-le, cliquez ci-dessous, puis acceptez la fenêtre qui s'affiche à l'écran.
+          Vous obtenez alors la liste des applications installées — pratique pour vérifier
+          l'identifiant exact de LUMEN.</p>
+        <div class="tools"><button class="btn" id="tvpair">Demander l'autorisation</button></div>
+        <p class="summary" id="tvpaired"></p>
+        <ul id="tvapps"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= NOMS ================= -->
+  <section id="t-names" hidden>
+    <div class="cols">
+      <div class="panel">
+        <h2>Règles de nettoyage</h2>
+        <p class="help">Appliquées au nom du fournisseur des chaînes, des films, des séries et des bouquets, dans l'ordre. Un nom que vous avez tapé à la main n'est jamais touché.</p>
+        <ul id="rules"></ul>
+        <div class="row" style="margin-top:12px">
+          <button class="btn main grow" id="rule-new">Ajouter une règle</button>
+          <button class="btn danger" id="names-reset" title="Oublier les noms tapés à la main">Noms d'origine</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Aperçu</h2>
+        <div class="tabs" style="margin:0 0 12px">
+          <button class="btn small" data-prev="live" aria-selected="true">Chaînes</button>
+          <button class="btn small" data-prev="vod" aria-selected="false">Films</button>
+          <button class="btn small" data-prev="series" aria-selected="false">Séries</button>
+          <button class="btn small" data-prev="cat" aria-selected="false">Bouquets</button>
+        </div>
+        <p class="summary" id="prevsum"></p>
+        <div class="prev scroll" id="preview"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GUIDE ================= -->
+  <section id="t-guide" hidden>
+    <div class="panel" style="margin-bottom:22px">
+      <h2>Sources du guide</h2>
+      <p class="help">Fichiers XMLTV publics qui complètent le guide du fournisseur, souvent avec un résumé et une vignette par programme. La première source qui reconnaît une chaîne gagne.</p>
+      <ul id="srclist"></ul>
+      <div class="row" style="margin-top:12px">
+        <input id="srcurl" type="url" class="grow" placeholder="https://exemple.fr/guide.xml.gz" aria-label="Adresse du fichier XMLTV">
+        <input id="srcname" type="text" placeholder="Nom (facultatif)" aria-label="Nom de la source" style="width:200px">
+        <button class="btn main" id="src-add">Ajouter</button>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="epg-refresh">Télécharger maintenant</button>
+        <button class="btn" id="epg-automap">Réassocier les chaînes</button>
+        <span class="summary grow" id="epgsum" style="margin:0"></span>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Association des chaînes</h2>
+      <p class="help">Les chaînes sans guide externe apparaissent ici. Cliquez sur « Associer » pour la chercher à la main.</p>
+      <div class="tools">
+        <input id="mq" type="search" placeholder="Rechercher une chaîne" aria-label="Rechercher une chaîne">
+        <label class="row" style="gap:6px"><input type="checkbox" id="only-unmapped" checked> Seulement les non associées</label>
+      </div>
+      <ul id="maplist" class="scroll"></ul>
+    </div>
+  </section>
+
+  <!-- ================= BOUQUETS DU FOURNISSEUR ================= -->
+  <section id="t-cats" hidden>
+    <div class="tabs" style="margin-bottom:14px">
+      <button class="btn small" data-kind="live" aria-selected="true">Direct</button>
+      <button class="btn small" data-kind="vod" aria-selected="false">Films</button>
+      <button class="btn small" data-kind="series" aria-selected="false">Séries</button>
+    </div>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Rechercher un bouquet" aria-label="Rechercher un bouquet">
+      <button class="btn" id="showAll">Tout afficher</button>
+      <button class="btn" id="hideAll">Tout masquer</button>
+    </div>
+    <p class="help">Case cochée = visible sur la TV. Cliquez sur le nom pour renommer.</p>
+    <p class="summary" id="summary"></p>
+    <ul id="list"></ul>
+  </section>
+
+  <div class="foot">
+    <button class="btn main" id="sync">Synchroniser maintenant</button>
+    <span id="status"></span>
+  </div>
+</main>
+
+<dialog id="dlg2">
+  <h2 id="dlg2-title">Titre</h2>
+  <div id="dlg2-body"></div>
+  <div class="tools" style="margin-top:18px;justify-content:flex-end">
+    <button class="btn" id="dlg2-cancel">Annuler</button>
+    <button class="btn main" id="dlg2-ok">Valider</button>
+  </div>
+</dialog>
+
+<dialog id="dlg">
+  <h2 id="dlg-title">Titre</h2>
+  <div id="dlg-body"></div>
+  <div class="row" style="margin-top:18px; justify-content:flex-end">
+    <button class="btn" id="dlg-cancel">Annuler</button>
+    <button class="btn main" id="dlg-ok">Valider</button>
+  </div>
+</dialog>
+
+<script src="reglages.js"></script>
+</body>
+</html>
